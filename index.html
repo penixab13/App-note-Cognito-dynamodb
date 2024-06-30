@@ -1,102 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note App</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aws-amplify@latest/dist/aws-amplify.min.js"></script>
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .card {
-            padding: 20px;
-        }
-        .modal-content {
-            padding: 20px;
-        }
-        .btn-custom {
-            margin-right: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-center">Note App</h1>
-        <div class="card">
-            <form id="noteForm">
-                <div class="form-group">
-                    <label for="notesID">Note ID:</label>
-                    <input type="text" class="form-control" id="notesID" name="notesID">
-                </div>
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input type="text" class="form-control" id="title" name="title" required>
-                </div>
-                <div class="form-group">
-                    <label for="content">Content:</label>
-                    <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
-                </div>
-                <div class="form-group text-center">
-                    <button id="createNote" type="button" class="btn btn-primary btn-custom">Create Note</button>
-                    <button id="readNote" type="button" class="btn btn-secondary btn-custom">Read Note</button>
-                    <button id="updateNote" type="button" class="btn btn-warning btn-custom">Update Note</button>
-                    <button id="deleteNote" type="button" class="btn btn-danger btn-custom">Delete Note</button>
-                    <button id="listNotes" type="button" class="btn btn-info btn-custom">List Notes</button>
-                </div>
-            </form>
-        </div>
-        <h2 class="text-center">Updates</h2>
-        <ul id="updates" class="list-group"></ul>
-    </div>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>NoteApp</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
 
-    <!-- Modal for displaying auth token -->
-    <div class="modal" id="authTokenModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Your Auth Token</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/font.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr.js"></script>
+    </head>
+    <body class="page-home">
+
+        <header class="site-header">
+            <h1 class="title">NoteApp</h1>
+            <nav class="site-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="notes.html">Your Notes</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="apply.html">Apply</a></li>
+                </ul>
+            </nav>
+            <button type="button" class="btn-menu"><span>Menu</span></button>
+            <a class="home-button" href="/register.html">Get Started!</a>
+        </header>
+
+        <section class="home-about">
+            <div class="row column large-9 xlarge-6 xxlarge-4">
+                <h2 class="section-title">How Does This Work?</h2>
+                <p class="content">
+                    In today’s fast-paced world, keeping track of important information can be a challenge. NoteApp makes it easy to capture, organize, and access your notes from anywhere. Whether you're jotting down a quick reminder or drafting a detailed plan, NoteApp is designed to help you stay organized and productive.
+                </p>
+            </div>
+
+            <div class="row medium-up-2 large-up-4">
+                <div class="column">
+                    <div class="home-about-block">
+                        <h3 class="title icon-download">Download The App</h3>
+                        <p class="content">Download the NoteApp from the app store and start capturing your thoughts and ideas with ease.</p>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <p class="authToken"></p>
+
+                <div class="column">
+                    <div class="home-about-block">
+                        <h3 class="title icon-notes">Create Notes</h3>
+                        <p class="content">Quickly create and organize notes with our easy-to-use interface. Add tags, set reminders, and more.</p>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                <div class="column">
+                    <div class="home-about-block">
+                        <h3 class="title icon-organize">Organize</h3>
+                        <p class="content">Organize your notes with folders and tags. Find what you need quickly with our powerful search functionality.</p>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="home-about-block">
+                        <h3 class="title icon-sync">Sync Across Devices</h3>
+                        <p class="content">Access your notes from any device. NoteApp syncs your notes securely across all your devices.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <script src="js/vendor/jquery-3.1.0.js"></script>
-    <script src="js/vendor/bootstrap.min.js"></script>
-    <script src="js/vendor/aws-cognito-sdk.min.js"></script>
-    <script src="js/vendor/amazon-cognito-identity.min.js"></script>
-    <script src="https://js.arcgis.com/4.3/"></script>
-    <script src="js/config.js"></script>
-    <script src="js/cognito-auth.js"></script>
-    <script src="js/ride.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Check if user is authenticated
-            Amplify.Auth.currentAuthenticatedUser()
-                .then(user => {
-                    // User is authenticated, show the app
-                    $('.container').show();
-                })
-                .catch(err => {
-                    // User is not authenticated, redirect to sign-in page
-                    window.location.href = '/signin.html';
-                });
-        });
-    </script>
-</body>
+        </section>
+
+        <section class="home-story">
+            <div class="row column large-9 xlarge-6 xxlarge-4">
+                <h2 class="section-title">Our Story</h2>
+                <p class="content">
+                    NoteApp was created by two passionate individuals who wanted to solve the problem of information overload. Combining their skills in software development and user experience design, they built NoteApp to help people manage their notes efficiently. Today, NoteApp helps thousands of users stay organized and productive every day.
+                </p>
+            </div>
+        </section>
+
+        <section class="home-sign-up">
+            <div class="row column">
+                <img class="icon-w" src="images/noteapp-icon.png" alt="NoteApp Icon">
+
+                <form onsubmit="javascript:void(0);">
+                    <input type="email" placeholder="Enter your email address">
+                    <button type="button">Submit</button>
+                </form>
+
+                <h2 class="section-title">Sign Up</h2>
+
+                <p class="content">NoteApp is available now! Enter your email to join our community and start taking better notes.</p>
+
+                <div class="apps">
+                    <a class="app-icon" href=""><img src="images/noteapp-apple.png" alt="Download on the Apple App Store"></a>
+                    <a class="app-icon" href=""><img src="images/noteapp-google.png" alt="Download on the Google Play Store"></a>
+                </div>
+
+                <div class="social">
+                    <a class="icon-fb" href="">Facebook</a>
+                    <a class="icon-tw" href="">Twitter</a>
+                    <a class="icon-ig" href="">Instagram</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-quote">
+            <div class="row column medium-8 xxlarge-6">
+                <div class="quote-wrap">
+                    <div class="quote">
+                        “NoteApp has transformed the way I organize my thoughts and tasks. It's simple, intuitive, and always with me.”
+                    </div>
+                    <div class="quoter">- Satisfied NoteApp User</div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="row column">
+                <nav class="footer-nav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="notes.html">Your Notes</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="apply.html">Apply</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="row column">
+                <div class="footer-legal">
+                    &copy;NoteApp Inc<br>
+                    All Rights Reserved
+                </div>
+            </div>
+        </footer>
+
+        <script src="js/vendor.js"></script>
+        <script src="js/main.js"></script>
+    </body>
 </html>
