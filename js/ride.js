@@ -128,7 +128,7 @@ NoteApp.notes = NoteApp.notes || {};
 
         $.ajax({
             method: 'DELETE',
-            url: _config.api.invokeUrl + '/note',
+            url: _config.api.invokeUrl + '/notes',
             headers: {
                 Authorization: authToken
             },
